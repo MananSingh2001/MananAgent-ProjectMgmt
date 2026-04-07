@@ -1,64 +1,85 @@
-# Manan Agent: Multi-Agent AI Project Management
+# Manan Agent — Multi-Agent AI System
 
-A powerful multi-agent AI system designed to manage tasks, GitHub repositories, and information using a primary orchestrator and specialized sub-agents.
+> **APAC GenAI Academy | Final Project Submission**
 
-## Core Architecture
+🚀 **Live Demo:** [https://manan-agent-332997736058.us-central1.run.app](https://manan-agent-332997736058.us-central1.run.app)
 
-- **Primary Agent (Orchestrator)**: Routes user prompts based on intent classification.
-- **Task Agent**: Integrates with Supabase for CRUD operations on tasks.
-- **Repo Agent**: Uses `octokit` to manage GitHub repositories and issues.
-- **Notes Agent**: Handles persistence of notes and information.
+## Overview
 
-## How it works
+Manan Agent is a **multi-agent AI system** that transforms project management from static tracking to active, autonomous agent orchestration. It uses **Google Gemini 2.0 Flash** as the primary reasoning engine to classify user intent and route tasks to specialized sub-agents.
 
-1.  **User Input**: User provides a natural language prompt (e.g., "Create a new repo named 'AwesomeApp'").
-2.  **Classification**: The Primary Agent classifies the intent into `TASK_MGMT`, `REPO_MGMT`, or `NOTES_MGMT`.
-3.  **Specialized Execution**: The chosen agent processes the specific request using LLM reasoning to determine the exact action and parameters.
-4.  **Database/Tool Interaction**: The sub-agent calls external APIs (GitHub/Supabase) to persist data or perform actions.
-5.  **Feedback**: The system returns a structured response to the user.
+## Architecture
 
-## Setup Instructions
+```
+User → React UI → Express Backend → Gemini Orchestrator
+                                         ↓
+                         ┌────────────────┼────────────────┐
+                         ↓                ↓                ↓
+                    Task Agent       Repo Agent       Notes Agent
+                   (Supabase)        (GitHub)        (Gemini AI)
+```
+
+### Core Components
+
+| Component | Technology | Role |
+|-----------|-----------|------|
+| **Frontend** | React + Vite + Tailwind CSS + Framer Motion | Premium glassmorphism UI with real-time agent status |
+| **Backend** | Node.js + Express | REST API server, static file serving, orchestration |
+| **Orchestrator** | Google Gemini 2.0 Flash | Intent classification & agent routing |
+| **Task Agent** | Supabase (PostgreSQL) | CRUD operations for tasks and milestones |
+| **Repo Agent** | GitHub API (Octokit) | Repository and issue management |
+| **Notes Agent** | Gemini AI | Intelligent note-taking and summarization |
+
+## Tech Stack
+
+- **AI Model:** Google Gemini 2.0 Flash (via `@google/generative-ai` SDK)
+- **Frontend:** React 19, Vite 8, TypeScript, Tailwind CSS 4, Framer Motion
+- **Backend:** Node.js 20, Express
+- **Database:** Supabase (PostgreSQL)
+- **Deployment:** Google Cloud Run (containerized via Docker)
+- **CI/CD:** Multi-stage Dockerfile with automated builds
+
+## Project Structure
+
+```
+├── client/                 # React frontend (Vite)
+│   ├── src/App.tsx         # Main UI with agent dashboard
+│   └── package.json
+├── server/                 # Express backend
+│   ├── index.js            # Orchestrator & API routes
+│   └── agents/
+│       ├── task_agent.js   # Supabase task management
+│       ├── repo_agent.js   # GitHub repository operations
+│       └── notes_agent.js  # AI-powered note taking
+├── Dockerfile              # Multi-stage production build
+└── README.md
+```
+
+## Deployment
 
 ### Prerequisites
-- Node.js installed.
-- Supabase Project ID and API Key.
-- GitHub Personal Access Token.
-- Google Gemini API Key.
+- Google Cloud account with Cloud Run enabled
+- API keys for: Gemini AI, Supabase, GitHub
 
-### Server Setup
-1.  Navigate to the \`server\` directory:
-    \`\`\`bash
-    cd server
-    \`\`\`
-2.  Install dependencies:
-    \`\`\`bash
-    npm install
-    \`\`\`
-3.  Configure your \`.env\` file with required keys.
-4.  Launch the server:
-    \`\`\`bash
-    node index.js
-    \`\`\`
+### Deploy to Cloud Run
 
-### Client Setup
-1.  Navigate to the \`client\` directory:
-    \`\`\`bash
-    cd client
-    \`\`\`
-2.  Install dependencies:
-    \`\`\`bash
-    npm install
-    \`\`\`
-3.  Start the development server:
-    \`\`\`bash
-    npm run dev
-    \`\`\`
+```bash
+gcloud run deploy manan-agent \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars "GEMINI_API_KEY=<key>,SUPABASE_URL=<url>,SUPABASE_KEY=<key>,GITHUB_TOKEN=<token>,GITHUB_OWNER=<owner>"
+```
 
-## Technologies Used
-- Backend: **Node.js, Express**
-- Frontend: **React, Tailwind CSS, Framer Motion, Lucide Icons**
-- AI Model: **Google Gemini 1.5 Flash**
-- Database: **Supabase**
-- Repository Management: **GitHub Octokit**
+## Key Features
 
-Built as part of the APAC GenAI Academy Challenge.
+- **Intelligent Routing:** Gemini classifies user requests and routes to the appropriate agent
+- **Real-time Status:** Live agent status indicators (Task, Repo, Notes)
+- **Premium UI:** Dark glassmorphism design with smooth animations
+- **Production Ready:** Dockerized and deployed on Google Cloud Run
+
+## Author
+
+**Manan Singh** — Built for the APAC GenAI Academy
+
+- GitHub: [@MananSingh2001](https://github.com/MananSingh2001)

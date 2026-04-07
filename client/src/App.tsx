@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
 import axios from 'axios';
-import { Bot, User, Send, Layout, List, Github, StickyNote, Activity, Database, CheckCircle, Clock } from 'lucide-react';
+import { Bot, User, Send, List, Github, StickyNote, Activity } from 'lucide-react';
+
 import { motion, AnimatePresence } from 'framer-motion';
 
 const App: React.FC = () => {
@@ -22,10 +24,9 @@ const App: React.FC = () => {
         setLoading(true);
 
         try {
-            const res = await axios.post('http://localhost:5000/api/orchestrate', { prompt });
+            const res = await axios.post('/api/orchestrate', { prompt });
             const { category, response } = res.data;
             
-            // Update agent status animation
             setAgentStatus(prev => ({ 
                 ...prev, 
                 [category.split('_')[0].toLowerCase()]: 'active' 
